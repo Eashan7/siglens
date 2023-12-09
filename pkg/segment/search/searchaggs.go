@@ -103,7 +103,7 @@ func applyAggregationsToResult(aggs *structs.QueryAggregators, segmentSearchReco
 	return nil
 }
 
-func applyAggregationsSingleBlock(multiReader *segread.MultiColSegmentReader, aggs *structs.QueryAggregators,
+func applyAggregationsToSingleBlock(multiReader *segread.MultiColSegmentReader, aggs *structs.QueryAggregators,
 	allSearchResults *segresults.SearchResults, blockChan chan *BlockSearchStatus, searchReq *structs.SegmentSearchRequest,
 	queryRange *dtu.TimeRange, sizeLimit uint64, wg *sync.WaitGroup, queryMetrics *structs.QueryProcessingMetrics,
 	qid uint64, blockSummaries []*structs.BlockSummary, aggsHasTimeHt bool, aggsHasNonTimeHt bool,
@@ -222,7 +222,7 @@ func GetAggColsAndTimestamp(aggs *structs.QueryAggregators) map[string]bool {
 	return aggCols
 }
 
-func applyAggsToResultFastPath(aggs *structs.QueryAggregators, segmentSearchRecords *SegmentSearchStatus,
+func applyAggregationsToResultFastPath(aggs *structs.QueryAggregators, segmentSearchRecords *SegmentSearchStatus,
 	searchReq *structs.SegmentSearchRequest, blockSummaries []*structs.BlockSummary, queryRange *dtu.TimeRange,
 	sizeLimit uint64, fileParallelism int64, queryMetrics *structs.QueryProcessingMetrics,
 	qid uint64, allSearchResults *segresults.SearchResults) error {
@@ -255,7 +255,7 @@ func applyAggsToResultFastPath(aggs *structs.QueryAggregators, segmentSearchReco
 	return nil
 }
 
-func applyAggsSingleBlockFastPath(aggs *structs.QueryAggregators,
+func applyAggregationsToSingleBlockFastPath(aggs *structs.QueryAggregators,
 	allSearchResults *segresults.SearchResults, blockChan chan *BlockSearchStatus, searchReq *structs.SegmentSearchRequest,
 	queryRange *dtu.TimeRange, sizeLimit uint64, wg *sync.WaitGroup, queryMetrics *structs.QueryProcessingMetrics,
 	qid uint64, blockSummaries []*structs.BlockSummary,
