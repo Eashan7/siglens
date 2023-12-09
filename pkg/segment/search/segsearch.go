@@ -654,7 +654,7 @@ func aggsFastPath(searchReq *structs.SegmentSearchRequest, searchNode *structs.S
 		return
 	}
 
-	err := applyAggsToResultFastPath(aggs, segmentSearchRecords, searchReq, blockSummaries, timeRange,
+	err := applyAggregationsToResultFastPath(aggs, segmentSearchRecords, searchReq, blockSummaries, timeRange,
 		sizeLimit, fileParallelism, queryMetrics, qid, allSearchResults)
 	if err != nil {
 		log.Errorf("qid=%d RawSearchColumnar failed to apply aggregations to result for segKey %+v. Error: %v", qid, searchReq.SegmentKey, err)

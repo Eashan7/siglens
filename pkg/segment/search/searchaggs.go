@@ -77,7 +77,7 @@ func applyAggregationsToResult(aggs *structs.QueryAggregators, segmentSearchReco
 	allBlocksToXRollup, aggsHasTimeHt, aggsHasNonTimeHt := getRollupForAggregation(aggs, rupReader)
 	for i := int64(0); i < fileParallelism; i++ {
 		blkWG.Add(1)
-		go applyAggregationsSingleBlock(sharedReader.MultiColReaders[i], aggs, allSearchResults, allBlocksChan,
+		go applyAggregationsToSingleBlock(sharedReader.MultiColReaders[i], aggs, allSearchResults, allBlocksChan,
 			searchReq, queryRange, sizeLimit, &blkWG, queryMetrics, qid, blockSummaries, aggsHasTimeHt,
 			aggsHasNonTimeHt, allBlocksToXRollup)
 	}
@@ -111,7 +111,7 @@ func applyAggregationsToSingleBlock(multiReader *segread.MultiColSegmentReader, 
 
 	blkResults, err := blockresults.InitBlockResults(sizeLimit, aggs, qid)
 	if err != nil {
-		log.Errorf("applyAggregationsSingleBlock: failed to initialize block results reader for %s. Err: %v", searchReq.SegmentKey, err)
+		log.Errorf("applyAggregationsToSingleBlock: failed to initialize block results reader for %s. Err: %v", searchReq.SegmentKey, err)
 		allSearchResults.AddError(err)
 	}
 	defer wg.Done()
@@ -122,7 +122,7 @@ func applyAggregationsToSingleBlock(multiReader *segread.MultiColSegmentReader, 
 		}
 		recIT, err := blockStatus.GetRecordIteratorCopyForBlock(utils.And)
 		if err != nil {
-			log.Errorf("qid=%d, applyAggregationsSingleBlock: failed to initialize record iterator for block %+v. Err: %v",
+			log.Errorf("qid=%d, applyAggregationsToSingleBlock: failed to initialize record iterator for block %+v. Err: %v",
 				qid, blockStatus.BlockNum, err)
 			continue
 		}
@@ -242,7 +242,7 @@ func applyAggregationsToResultFastPath(aggs *structs.QueryAggregators, segmentSe
 	allBlocksToXRollup, _, _ := getRollupForAggregation(aggs, rupReader)
 	for i := int64(0); i < fileParallelism; i++ {
 		blkWG.Add(1)
-		go applyAggsSingleBlockFastPath(aggs, allSearchResults, allBlocksChan,
+		go applyAggregationsToSingleBlockFastPath(aggs, allSearchResults, allBlocksChan,
 			searchReq, queryRange, sizeLimit, &blkWG, queryMetrics, qid, blockSummaries,
 			allBlocksToXRollup)
 	}
